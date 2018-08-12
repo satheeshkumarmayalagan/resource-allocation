@@ -85,17 +85,19 @@ public class ResourceAllocationTest {
 
 		Iterator<Entry<Hole, Ball>> asignedHoleBallEntry = result.assignedHolesBalls.entrySet().iterator();
 
-		// hole size 7 contains ball size 6
-		assertEquals(asignedHoleBallEntry.next().getKey().size, 7);
-		assertEquals(asignedHoleBallEntry.next().getValue().size, 6);
-
-		// hole size 6 contains ball size 5
-		assertEquals(asignedHoleBallEntry.next().getKey().size, 6);
-		assertEquals(asignedHoleBallEntry.next().getValue().size, 5);
-
-		// hole size 9 contains ball size 7
-		assertEquals(asignedHoleBallEntry.next().getKey().size, 9);
-		assertEquals(asignedHoleBallEntry.next().getValue().size, 7);
+		while (asignedHoleBallEntry.hasNext()) {
+			Entry<Hole, Ball> pair = asignedHoleBallEntry.next();
+			if (pair.getKey().size == 7) {
+				// hole size 7 contains ball size 6
+				assertEquals(pair.getValue().size, 6);
+			} else if (pair.getKey().size == 6) {
+				// hole size 6 contains ball size 5
+				assertEquals(pair.getValue().size, 5);
+			} else if (pair.getKey().size == 9) {
+				// hole size 9 contains ball size 7
+				assertEquals(pair.getValue().size, 7);
+			}
+		}
 
 		// ball 4, the smallest in the example is unassigned
 		assertEquals(result.unAssignedBalls.get(0).size, 4);
