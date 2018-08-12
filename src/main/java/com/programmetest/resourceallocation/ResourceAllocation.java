@@ -1,8 +1,10 @@
 package com.programmetest.resourceallocation;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -24,11 +26,12 @@ public class ResourceAllocation {
 		Hole hole = holesItr.next();
 
 		List<Ball> unAssignedBalls = new ArrayList<Ball>();
+		Map<Hole, Ball> assignedHolesBalls = new HashMap<Hole, Ball>();
 
 		while (true) {
-			if (hole.canAllocate(ball)) {
+			if (canAllocate(hole, ball)) {
 				// Fits. add to the collection of (hole, ball) pairs
-				hole.allocate(ball);
+				assignedHolesBalls.put(hole, ball);
 				if (!ballsItr.hasNext() || !holesItr.hasNext())
 					break; // either no more ball or hole
 				ball = ballsItr.next(); // pick the next ball
@@ -42,8 +45,13 @@ public class ResourceAllocation {
 										// current hole
 			}
 		}
-		List<Hole> unAssignedHoles = holes.stream().filter(h -> !h.containsBall()).collect(Collectors.toList());
-		List<Hole> assignedHolesBalls = holes.stream().filter(h -> h.containsBall()).collect(Collectors.toList());
+
+		List<Hole> unAssignedHoles = holes.stream().filter(h -> !assignedHolesBalls.containsKey(h))
+				.collect(Collectors.toList());
 		return new AllcocationResult(assignedHolesBalls, unAssignedHoles, unAssignedBalls);
+	}
+
+	public static boolean canAllocate(Hole hole, Ball ball) {
+		return ball.size <= hole.size;
 	}
 }

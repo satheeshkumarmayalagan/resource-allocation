@@ -7,7 +7,9 @@ import static org.junit.Assume.assumeThat;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map.Entry;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -77,19 +79,23 @@ public class ResourceAllocationTest {
 		AllcocationResult result = ResourceAllocation.allocate(balls, holes);
 
 		result.assignedHolesBalls
-				.forEach(e -> System.out.println("Hole " + e.size + " assigned with ball " + e.ball.size));
+				.forEach((k, v) -> System.out.println("Hole " + k.size + " assigned with ball " + v.size));
 		result.unAssignedBalls.forEach(e -> System.out.println("Unassigned Ball " + e.size));
 		result.unAssignedHoles.forEach(e -> System.out.println("Unassigned Hole " + e.size));
 
-		// hole size 9 contains ball size 7
-		assertEquals(result.assignedHolesBalls.get(0).size, 9);
-		assertEquals(result.assignedHolesBalls.get(0).ball.size, 7);
+		Iterator<Entry<Hole, Ball>> asignedHoleBallEntry = result.assignedHolesBalls.entrySet().iterator();
+
 		// hole size 7 contains ball size 6
-		assertEquals(result.assignedHolesBalls.get(1).size, 7);
-		assertEquals(result.assignedHolesBalls.get(1).ball.size, 6);
+		assertEquals(asignedHoleBallEntry.next().getKey().size, 7);
+		assertEquals(asignedHoleBallEntry.next().getValue().size, 6);
+
 		// hole size 6 contains ball size 5
-		assertEquals(result.assignedHolesBalls.get(2).size, 6);
-		assertEquals(result.assignedHolesBalls.get(3).ball.size, 5);
+		assertEquals(asignedHoleBallEntry.next().getKey().size, 6);
+		assertEquals(asignedHoleBallEntry.next().getValue().size, 5);
+
+		// hole size 9 contains ball size 7
+		assertEquals(asignedHoleBallEntry.next().getKey().size, 9);
+		assertEquals(asignedHoleBallEntry.next().getValue().size, 7);
 
 		// ball 4, the smallest in the example is unassigned
 		assertEquals(result.unAssignedBalls.get(0).size, 4);
