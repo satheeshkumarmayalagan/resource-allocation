@@ -89,7 +89,7 @@ public class ResourceAllocationTest {
 		assertEquals(result.assignedHolesBalls.get(1).ball.size, 6);
 		// hole size 6 contains ball size 5
 		assertEquals(result.assignedHolesBalls.get(2).size, 6);
-		assertEquals(result.assignedHolesBalls.get(3).ball.size, 5);
+		assertEquals(result.assignedHolesBalls.get(2).ball.size, 5);
 
 		// ball 4, the smallest in the example is unassigned
 		assertEquals(result.unAssignedBalls.get(0).size, 4);
